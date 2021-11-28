@@ -3,6 +3,11 @@ dbutils.widgets.removeAll()
 
 # COMMAND ----------
 
+demo = "road_safety"
+dbutils.widgets.text("demo", demo, "demo")
+
+# COMMAND ----------
+
 from pyspark.sql.functions import rand, input_file_name, from_json, col
 from pyspark.sql.types import *
 
@@ -29,12 +34,12 @@ user = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().
 username = clean_string(user.partition('@')[0])
 print("Created variables:")
 print("current_user: {}".format(user))
-dbName = re.sub(r'\W+', '_', username)
-path = "/Users/{}/demo".format(user)
+dbName = re.sub(r'\W+', '_', username) + "_" + demo
+path = f"/Users/{user}/{demo}"
 dbutils.widgets.text("path", path, "path")
 dbutils.widgets.text("dbName", dbName, "dbName")
-print("path (default path): {}".format(path))
-spark.sql("""create database if not exists {} LOCATION '{}/tables' """.format(dbName, path))
+print(f"path (default path): {path}")
+spark.sql("""create database if not exists {} LOCATION '{}/{}/tables' """.format(dbName, demo, path))
 spark.sql("""USE {}""".format(dbName))
 print("dbName (using database): {}".format(dbName))
 
