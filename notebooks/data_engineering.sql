@@ -1,11 +1,17 @@
 -- Databricks notebook source
-
--- COMMAND ----------
-
 -- MAGIC %run ./resources/setup
 
 -- COMMAND ----------
 
+-- MAGIC %md
+-- MAGIC ## Saving the refined data as delta tables
+-- MAGIC Create temporary views and save as delta tables. 
+-- MAGIC 
+-- MAGIC Now that we have our refined tables in memory including the new fields, we'll write these back out refined delta tables to add a bit of permanence. It's a good idea to think of these tables as being useful for other purposes too - such as exporting to BI tools, shipping for ML etc. This is the first tier of data we will likely be reporting on in the future.
+
+-- COMMAND ----------
+
+-- DBTITLE 1,Accidents
 CREATE
 OR REPLACE TEMPORARY VIEW accident_summary AS
 SELECT
@@ -35,6 +41,17 @@ FROM
 
 -- COMMAND ----------
 
+-- DROP TABLE IF EXISTS s_accidents;
+CREATE
+OR REPLACE TABLE s_accidents USING delta PARTITIONED BY (la_highway)
+SELECT
+  *
+FROM
+  accident_summary
+
+-- COMMAND ----------
+
+-- DBTITLE 1,Casualty
 CREATE
 OR REPLACE VIEW casualty_summary AS
 SELECT
@@ -52,6 +69,16 @@ FROM
 
 -- COMMAND ----------
 
+CREATE
+OR REPLACE TABLE s_casualties USING delta PARTITIONED BY (Age_Band_of_Casualty)
+SELECT
+  *
+FROM
+  casualty_summary
+
+-- COMMAND ----------
+
+-- DBTITLE 1,Vehicle
 CREATE
 OR REPLACE VIEW vehicle_summary AS
 SELECT
@@ -73,32 +100,6 @@ FROM
 
 -- COMMAND ----------
 
--- MAGIC %md
--- MAGIC ## Saving the refined data as delta tables
--- MAGIC Now that we have our refined tables in memory including the new fields, we'll write these back out refined delta tables to add a bit of permanence. It's a good idea to think of these tables as being useful for other purposes too - such as exporting to BI tools, shipping for ML etc. This is the first tier of data we will likely be reporting on in the future.
-
--- COMMAND ----------
-
--- DROP TABLE IF EXISTS s_accidents;
-CREATE
-OR REPLACE TABLE s_accidents USING delta PARTITIONED BY (la_highway)
-SELECT
-  *
-FROM
-  accident_summary
-
--- COMMAND ----------
-
-CREATE
-OR REPLACE TABLE s_casualties USING delta PARTITIONED BY (Age_Band_of_Casualty)
-SELECT
-  *
-FROM
-  casualty_summary
-
--- COMMAND ----------
-
--- DROP TABLE IF EXISTS s_vehicles;
 CREATE
 OR REPLACE TABLE s_vehicles USING delta PARTITIONED BY (Age_Band_of_Driver)
 SELECT
@@ -111,7 +112,6 @@ FROM
 -- MAGIC %md
 -- MAGIC ## Coalesce clean data
 -- MAGIC Now let's build some aggregated tables for proper BI reporting
-
 
 -- COMMAND ----------
 
@@ -154,7 +154,6 @@ FROM
 
 -- COMMAND ----------
 
--- DROP TABLE IF EXISTS g_mva;
 CREATE
 OR REPLACE TABLE g_mva USING delta PARTITIONED BY (Casualty_Severity)
 SELECT

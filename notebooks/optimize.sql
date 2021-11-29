@@ -1,4 +1,6 @@
 -- Databricks notebook source
+-- MAGIC %md
+-- MAGIC ## Optimize job run daily
 
 -- COMMAND ----------
 
