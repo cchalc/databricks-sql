@@ -19,7 +19,7 @@
                     "num_workers": 4
                 },
                 "notebook_task": {
-                    "notebook_path": "/Repos/christopher.chalcraft@databricks.com/databricks-sql/notebooks/data_engineering"
+                    "notebook_path": "/Repos/christopher.chalcraft@databricks.com/databricks-sql/notebooks/road_safety/data_engineering"
                 },
                 "email_notifications": {},
                 "task_key": "dataeng"
@@ -39,7 +39,7 @@
                     "num_workers": 2
                 },
                 "notebook_task": {
-                    "notebook_path": "/Repos/christopher.chalcraft@databricks.com/databricks-sql/notebooks/optimize"
+                    "notebook_path": "/Repos/christopher.chalcraft@databricks.com/databricks-sql/notebooks/road_safety/optimize"
                 },
                 "email_notifications": {},
                 "task_key": "optimize",
