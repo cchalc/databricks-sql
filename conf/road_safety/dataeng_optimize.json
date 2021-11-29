@@ -1,0 +1,54 @@
+{
+    "settings": {
+        "email_notifications": {},
+        "name": "road_safety",
+        "max_concurrent_runs": 1,
+        "tasks": [
+            {
+                "new_cluster": {
+                    "spark_version": "9.1.x-scala2.12",
+                    "aws_attributes": {
+                        "availability": "SPOT_WITH_FALLBACK",
+                        "first_on_demand": 1,
+                        "zone_id": "us-west-2a"
+                    },
+                    "node_type_id": "i3.xlarge",
+                    "spark_env_vars": {
+                        "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+                    },
+                    "num_workers": 4
+                },
+                "notebook_task": {
+                    "notebook_path": "/Repos/christopher.chalcraft@databricks.com/databricks-sql/notebooks/data_engineering"
+                },
+                "email_notifications": {},
+                "task_key": "dataeng"
+            },
+            {
+                "new_cluster": {
+                    "spark_version": "9.1.x-scala2.12",
+                    "aws_attributes": {
+                        "availability": "SPOT_WITH_FALLBACK",
+                        "first_on_demand": 1,
+                        "zone_id": "us-west-2a"
+                    },
+                    "node_type_id": "i3.xlarge",
+                    "spark_env_vars": {
+                        "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+                    },
+                    "num_workers": 2
+                },
+                "notebook_task": {
+                    "notebook_path": "/Repos/christopher.chalcraft@databricks.com/databricks-sql/notebooks/optimize"
+                },
+                "email_notifications": {},
+                "task_key": "optimize",
+                "depends_on": [
+                    {
+                        "task_key": "dataeng"
+                    }
+                ]
+            }
+        ]
+    }
+}
