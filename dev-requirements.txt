@@ -1,3 +1,4 @@
 databricks-cli>=0.15.0
 dbx
 nutter
+kaggle
